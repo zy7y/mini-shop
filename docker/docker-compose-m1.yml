@@ -39,18 +39,17 @@ services:
 
   # 单机部署
   elasticsearch:
-    image: "elasticsearch:7.10.1"
+    image: "elasticsearch:7.16.2"
     restart: always
     volumes:
       - ./elasticsearch/config:/usr/share/elasticsearch/config
     ports:
       - "9200:9200"
     environment:
-      -  "discovery.type=single-node"
+      - "discovery.type=single-node"
 
   kinbana:
-    image: "kibana:7.10.1"
+    image: "kibana:7.16.2"
     restart: always
     ports:
-    - "5601:5601"
-
+      - "5601:5601"
