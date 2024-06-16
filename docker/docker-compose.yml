@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  minio:
+    image: minio/minio:RELEASE.2023-02-09T05-16-53Z
+    restart: always
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=12345678
+    ports:
+      - "9000:9000" # api
+      - "9001:9001" # web 客户端
+    command: server /data/minio/ --console-address ":9001"
+    volumes:
+      - ./minio/data:/data
+
+  mysql:
+    image: "mysql:8.0.27"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      TZ: Asia/Shanghai # 指定时区
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: "redis:6.2.6-alpine3.15"
+    restart: always
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: "rabbitmq:3.9.11-management-alpine"
+    restart: always
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  # 单机部署
+  elasticsearch:
+    image: "elasticsearch:7.10.1"
+    restart: always
+    volumes:
+      - ./elasticsearch/config:/usr/share/elasticsearch/config
+    ports:
+      - "9200:9200"
+    environment:
+      -  "discovery.type=single-node"
+
+  kinbana:
+    image: "kibana:7.10.1"
+    restart: always
+    ports:
+    - "5601:5601"
+
